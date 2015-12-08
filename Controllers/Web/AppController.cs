@@ -39,7 +39,7 @@ namespace TheWorld.Controllers.Web
                 if (_mailService.SendMail(
                     email,
                     email,
-                    $"Contact Page prom {model.Name}({model.Email})",
+                    $"Contact Page from {model.Name}({model.Email})",
                     model.Message))
                 {
                     ModelState.Clear();
