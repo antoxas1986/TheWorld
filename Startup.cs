@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNet.Builder;
-using TheWorld.Services;
-using Microsoft.Dnx.Runtime;
+﻿using TheWorld.Services;
 using TheWorld.Model;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNet.Builder;
+using Microsoft.Extensions.Logging;
 
 namespace TheWorld
 {
@@ -23,22 +23,24 @@ namespace TheWorld
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
-           
             services.AddEntityFramework()
                 .AddSqlServer()
-                .AddDbContext<WorldContext>();
+                .AddDbContext<IWorldContext>();
+
+            services.AddTransient<WorldContextSeedData>();
+            services.AddScoped<IWorldRepository, WorldRepository>();
 
             services.AddScoped<IMailServices, DebugMailService>();
-
+            services.AddLogging();
             services.AddMvc();
 
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, WorldContextSeedData seeder, ILoggerFactory loggerFactory)
         {
-            // Add the platform handler to the request pipeline.
+            loggerFactory.AddDebug(LogLevel.Warning);
             app.UseStaticFiles();
+            
             app.UseMvc(config => {
                 config.MapRoute(
                    name: "Default",
@@ -46,7 +48,7 @@ namespace TheWorld
                    defaults: new { controller ="App", action = "Index"}
                    );
             });
-
+            seeder.EnsureSeedData();
         }
     }
 }

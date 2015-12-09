@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TheWorld.Model;
 using TheWorld.Services;
 using TheWorld.ViewModels;
 
@@ -11,13 +12,16 @@ namespace TheWorld.Controllers.Web
     public class AppController : Controller
     {
         private IMailServices _mailService;
+        private IWorldRepository _repository;
 
-        public AppController(IMailServices service)
+        public AppController(IMailServices service, IWorldRepository repository)
         {
             _mailService = service;
+            _repository = repository;
         }
         public IActionResult Index() {
-            return View();
+            var Trips = _repository.GetAllTrips();
+            return View(Trips);
         }
         public IActionResult About()
         {
