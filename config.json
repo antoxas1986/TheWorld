@@ -3,6 +3,6 @@
     "SiteEmailAddress": "contact_us@theworld.com"
   },
   "Data": {
-    "WorldContextConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TheWorldDB;Trusted_Connection=true;MultipleActiveResultSets=true;"
+    "WorldContextConnection": "Server=(local)\\MSSQLLOCALDB;Database=TheWorldDB;Trusted_Connection=true;MultipleActiveResultSets=true;"
   } 
 }
